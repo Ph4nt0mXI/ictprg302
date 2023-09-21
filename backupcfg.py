@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
-jobs = {"job700" : "/home/ec2-user/environment/ictprg302-t1/file1",
-        "job1" : "/home/ec2-user/environment/ictprg302-t1/dir1"}
+jobs = {"job700" : "1/home/ec2-user/environment/ictprg302/file",
+        "job1" : "/home/ec2-user/environment/ictprg302/dir1"}
 
 
-backupDir = "/home/ec2-user/environment/ictprg302-t1/backups"
+backupDir = "/home/ec2-user/environment/ictprg302/backups"
 
-backupLog = "/home/ec2-user/environment/ictprg302-t1/backup.log"
+backupLog = "/home/ec2-user/environment/ictprg302/backup.log"
 
-email = {}
+smtp = {}
