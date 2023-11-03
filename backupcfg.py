@@ -8,9 +8,9 @@ backupDir = "/home/ec2-user/environment/ictprg302/backups"
 
 backupLog = "/home/ec2-user/environment/ictprg302/backup.log"
 
-smtp = {"sender": "dcleary@sunitafe.edu.au",
-        "recipient": "",
-        "server": "smtp.gmail.com",
-        "port": 587,
-        "user": "", # need to specify a gmail email address with an app password setup
-        "password": ""}   # need a gmail app password
+smtp = {"sender": "nathdog11@hotmail.com",
+            "recipient": "nathdog11@gmail.com",
+            "server": "smtp.gmail.com",
+            "port": 587,
+            "user": "nathdog11@gmail.com", # need to specify a gmail email address with an app password setup
+            "password": "gscawqssvxzruwje"}   # need a gmail app passwordmail app password

@@ -1,5 +1,11 @@
 #!/usr/bin/python3
-
+"""
+Title: Backup.py
+Author: Nathan Davies
+Version: 1.0
+Copyright Nathan Davies
+Description: this program is designed to be used to backup both files and directories of files.
+"""
 import os
 import math
 import sys
@@ -11,11 +17,14 @@ import pathlib
 import shutil
 
 def errorHandler(errorMessage, dateTimeStamp):
+# The errorHandler function helps to define which error is occuring, making it easier for the user to understand what type of error they are having.
     print (errorMessage)
     writeLogMessage(errorMessage, dateTimeStamp, False)
+    sendEmail(errorMessage)
     pass
 
 def writeLogMessage(logMessage, dateTimeStamp, isSuccess):
+# The writeLogMessage function writes and print a message both to a log and in the terminal about whether the backup was successful or if it's a failure, what error has occured 
     
     try:
         file = open(backupLog, "a")
@@ -29,8 +38,25 @@ def writeLogMessage(logMessage, dateTimeStamp, isSuccess):
         print("ERROR: File does not exist.")
     except IOError:
         print("ERROR: File could not be accessed.")
+        
+def sendEmail(message):
+#This defines who the email message is to, who is snending the message and what message is being sent 
+    email = 'To: ' + smtp["recipient"] + '\n' + 'From: ' + smtp["sender"] + '\n' + 'Subject: Backup Error\n\n' + message + '\n'
 
+    # connect to email server and send email
+    try:
+        smtp_server = smtplib.SMTP(smtp["server"], smtp["port"])
+        smtp_server.ehlo()
+        smtp_server.starttls()
+        smtp_server.ehlo()
+        smtp_server.login(smtp["user"], smtp["password"])
+        smtp_server.sendmail(smtp["sender"], smtp["recipient"], email)
+        smtp_server.close()
+    except Exception as e:
+        print("ERROR: An error occurred.")
+        
 def main():
+# this is the main function, this body of the program which is the steps which the program follows
    
     try:
       
@@ -58,7 +84,7 @@ def main():
                         Destination = backupDir
                         # check Destination is valid
                         if not os.path.exists(Destination):
-                            os.makedirs(jobsPath)
+                            #os.makedirs(jobsPath)
                             errorHandler(f"ERROR: Dir {Destination} does not exist", dateTimeStamp)
                         else:
                             
@@ -68,23 +94,14 @@ def main():
                             if pathlib.Path(jobsPath).is_dir():
                                 shutil.copytree(jobsPath, dstLoc)
                             else:
-                                shutil.copy(jobsPath, dstLoc)
+                                shutil.copy2(jobsPath, dstLoc)
+                            
                             
                             writeLogMessage(f"Copied {jobsPath} to {dstLoc}", dateTimeStamp, True) 
                             print(f"{jobsPath} Has been backed up successfully")
-       # def sendEmail(message):
-            email = 'To: ' + smtp["recipient"] + '\n' + 'From: ' + smtp["sender"] + '\n' + 'Subject: Backup Error\n\n' + message + '\n'
-        
-       #sendEmail(message)
-        smtp_server = smtplib.SMTP(smtp["server"], smtp["port"])
-        smtp_server.ehlo()
-        smtp_server.starttls()
-        smtp_server.ehlo()
-        smtp_server.login(smtp["user"], smtp["password"])
-        smtp_server.sendmail(smtp["sender"], smtp["recipient"], email)
-        smtp_server.close()
-    except:
-        print ("ERROR: there was an issue") 
+    except:                        
+        sendEmail("ERROR: The program has crashed")                   
+ 
 
 if __name__ == '__main__':
     main()
